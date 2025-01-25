@@ -4,7 +4,7 @@ import java.util.*;
 
 public class AdjMapGraph<V, E> implements Graph<V, E> {
 
-    private Map<V, Map<V, E>> adjacencyMap;
+    private final Map<V, Map<V, E>> adjacencyMap;
 
     public AdjMapGraph() {
         this.adjacencyMap = new HashMap<>();
@@ -16,7 +16,7 @@ public class AdjMapGraph<V, E> implements Graph<V, E> {
 
     @Override
     public int numVertices() {
-        return this.adjacencyMap.size();
+        return getAdjacencyMap().size();
     }
 
     @Override
@@ -53,51 +53,111 @@ public class AdjMapGraph<V, E> implements Graph<V, E> {
 
     @Override
     public ArrayList<V> endVertices(E e) {
+        ArrayList<V> verticesList = new ArrayList<>();
+        for (Map<V, E> adjacent : getAdjacencyMap().values()) {
+            for (Map.Entry<V, E> entry : adjacent.entrySet()) {
+                if (entry.getValue().equals(e)) {
+                    verticesList.add(entry.getKey());
+                    verticesList.add(HelperFindKeyByValue(adjacent));
+                    return verticesList;
+                }
+            }
+        }
+        return null;
+    }
+
+    private V HelperFindKeyByValue(Map<V, E> givenValue) {
+        for (Map.Entry<V, Map<V, E>> entry : getAdjacencyMap().entrySet()) {
+            if (entry.getValue().equals(givenValue))
+                return entry.getKey();
+        }
         return null;
     }
 
     @Override
     public V opposite(V v, E e) {
+        ArrayList<V> endVerticesOfE = endVertices(e);
+        if (endVerticesOfE != null) {
+            if (endVerticesOfE.get(0).equals(v))
+                return endVerticesOfE.get(1);
+            else if (endVerticesOfE.get(1).equals(v))
+                return endVerticesOfE.get(0);
+            else throw new IllegalArgumentException("v is not incident to this edge");
+        }
         return null;
     }
 
     @Override
     public int outDegree(V v) {
+        if (getAdjacencyMap().containsKey(v)) {
+            return getAdjacencyMap().get(v).size();
+        }
         return 0;
     }
 
     @Override
     public int inDegree(V v) {
-        return 0;
+        int inDegree = 0;
+        for (Map<V, E> adjacent : getAdjacencyMap().values()) {
+            for (V vertex : adjacent.keySet()) {
+                if (vertex.equals(v)) {
+                    inDegree++;
+                }
+            }
+        }
+        return inDegree;
     }
 
     @Override
     public ArrayList<E> outgoingEdges(V v) {
+        if (getAdjacencyMap().containsKey(v)) {
+            return new ArrayList<>(getAdjacencyMap().get(v).values());
+        }
         return null;
     }
 
     @Override
     public ArrayList<E> incomingEdges(V v) {
-        return null;
+        ArrayList<E> incomingEdges = new ArrayList<>();
+        for (Map<V, E> adjacent : getAdjacencyMap().values()) {
+            for (Map.Entry<V, E> entry : adjacent.entrySet()) {
+                if (entry.getKey().equals(v)) {
+                    incomingEdges.add(entry.getValue());
+                }
+            }
+        }
+        return incomingEdges;
     }
 
     @Override
     public void insertVertex(V x) {
-
+        if (!getAdjacencyMap().containsKey(x)) {
+            getAdjacencyMap().put(x, new HashMap<>());
+        }
     }
 
     @Override
     public void insertEdge(V u, V v, E x) {
-
+        if (getAdjacencyMap().containsKey(u) && getAdjacencyMap().containsKey(v)) {
+            getAdjacencyMap().get(u).put(v, x);
+            getAdjacencyMap().get(v).put(u, x);
+        }
     }
 
     @Override
     public void removeVertex(V v) {
-
+        if (getAdjacencyMap().containsKey(v)) {
+            getAdjacencyMap().remove(v);
+            for (Map<V, E> edges : getAdjacencyMap().values()) {
+                edges.remove(v);
+            }
+        }
     }
 
     @Override
     public void removeEdge(E e) {
-
+        for (Map<V, E> edges : getAdjacencyMap().values()) {
+            edges.values().remove(e);
+        }
     }
 }
