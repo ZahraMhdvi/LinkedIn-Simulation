@@ -1,5 +1,9 @@
 package src.DataStructures.BPTree;
 
+import src.Inex.IndexById;
+import src.Inex.IndexBySpecialties;
+import src.User.User;
+
 import java.lang.*;
 import java.util.*;
 import java.io.*;
