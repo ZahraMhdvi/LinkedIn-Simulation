@@ -64,24 +64,28 @@ public class BPlusTree<K extends Comparable<K>, T> {
         }
     }
     public void insert(K key, T value) {
-        LeafNode<K,T> newLeaf = new LeafNode<K,T>(key, value);
-        Entry<K, Node<K,T>> entry = new AbstractMap.SimpleEntry<K, Node<K,T>>(key, newLeaf);
+        LeafNode<K, T> newLeaf = new LeafNode<>(key, value);
+        Entry<K, Node<K, T>> entry = new AbstractMap.SimpleEntry<>(key, newLeaf);
 
-        if(root == null || root.keys.size() == 0) {
+
+        if (root == null) {
             root = entry.getValue();
+            return;
         }
 
-        Entry<K, Node<K,T>> newChildEntry = getChildEntry(root, entry, null);
+        if (root.keys.size() == 0 && root.isLeafNode()) {
+            root = entry.getValue();
+            return;
+        }
 
-        if(newChildEntry == null) {
-            return;
-        } else {
-            IndexNode<K,T> newRoot = new IndexNode<K,T>(newChildEntry.getKey(), root,
-                    newChildEntry.getValue());
+        Entry<K, Node<K, T>> newChildEntry = getChildEntry(root, entry, null);
+
+        if (newChildEntry != null) {
+            IndexNode<K, T> newRoot = new IndexNode<>(newChildEntry.getKey(), root, newChildEntry.getValue());
             root = newRoot;
-            return;
         }
     }
+
 
     private Entry<K, Node<K,T>> getChildEntry(Node<K,T> node, Entry<K, Node<K,T>> entry,
                                               Entry<K, Node<K,T>> newChildEntry) {
