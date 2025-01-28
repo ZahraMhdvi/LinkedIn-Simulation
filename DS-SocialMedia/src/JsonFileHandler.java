@@ -7,6 +7,7 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
 
@@ -68,6 +69,27 @@ public class JsonFileHandler {
                 if (graph.getEdge(user, this.initialMap.get(IDs)) == null)
                     graph.insertEdge(user, this.initialMap.get(IDs), totalEdgesCounter++);
             }
+        }
+    }
+
+    public void addUserToJson(User newUser) { //TODO: check this when signup method is written
+        JSONObject object = new JSONObject();
+        object.put("id", String.valueOf(newUser.getId()));
+        object.put("name", newUser.getName());
+        object.put("dateOfBirth",newUser.getDateOfBirth());
+        object.put("universityLocation", newUser.getUniversityLocation());
+        object.put("field", newUser.getField());
+        object.put("workplace", newUser.getWorkplace());
+        JSONArray specialties = new JSONArray();
+        specialties.addAll(newUser.getSpecialties());
+        JSONArray connectionIDs=new JSONArray();
+        connectionIDs.addAll(newUser.getConnections());
+        object.put("specialties", specialties);
+        object.put("connectionId", connectionIDs);
+        try(FileWriter fileWriter = new FileWriter("users.json");) {
+            fileWriter.write(object.toJSONString());
+        } catch (IOException e) {
+            System.out.println("error in writing new user's info in the json file");
         }
     }
 }
