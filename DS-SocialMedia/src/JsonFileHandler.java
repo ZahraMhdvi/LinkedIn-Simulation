@@ -1,3 +1,4 @@
+import DataStructures.Graph.AdjMapGraph;
 import DataStructures.Table.Table;
 import User.User;
 import org.json.simple.JSONArray;
@@ -12,13 +13,20 @@ import java.util.*;
 public class JsonFileHandler {
     private final Map<Integer, User> initialMap = new HashMap<>();
     JSONParser jsonParser = new JSONParser();
+    public static int totalEdgesCounter;
 
     public JsonFileHandler() {
+        generateUsers();
+        totalEdgesCounter = 0;
+    }
+
+    public Map<Integer, User> getInitialMap() {
+        return initialMap;
     }
 
     private void generateUsers() {
         try {
-            JSONArray array = (JSONArray) jsonParser.parse(new FileReader("C:\\Users\\User\\IdeaProjects\\ds-finalproject-socialmedia-ds-haters\\users.json"));
+            JSONArray array = (JSONArray) jsonParser.parse(new FileReader("users.json"));
             for (Object userInFile : array) {
                 JSONObject user = (JSONObject) userInFile;
                 String id = (String) user.get("id");
@@ -46,9 +54,20 @@ public class JsonFileHandler {
     }
 
     public void constructDefaultTable(Table<Integer, User> table) {
-        generateUsers();
         for (Map.Entry<Integer, User> entry : this.initialMap.entrySet()) {
             table.insert(entry.getKey(), entry.getValue());
+        }
+    }
+
+    public void constructDefaultGraph(AdjMapGraph<User, Integer> graph) { //TODO: check (this and getEdge)
+        for (Map.Entry<Integer, User> entry : this.initialMap.entrySet()) {
+            graph.insertVertex(entry.getValue());
+        }
+        for (User user : graph.vertices()) {
+            for (Integer IDs : user.getConnections()) {
+                if (graph.getEdge(user, this.initialMap.get(IDs)) == null)
+                    graph.insertEdge(user, this.initialMap.get(IDs), totalEdgesCounter++);
+            }
         }
     }
 }
