@@ -1,5 +1,9 @@
 package User;
 
+import DataStructures.Graph.AdjMapGraph;
+import DataStructures.Table.Table;
+import File.JsonFileHandler;
+
 import java.util.List;
 import java.util.Set;
 
@@ -100,5 +104,21 @@ public class User {
                 ", specialties=" + specialties +
                 ", connections=" + connections +
                 '}';
+    }
+
+    public void addNewConnection(User user, AdjMapGraph<User, Integer> graph, JsonFileHandler fileHandler, Table<Integer, User> table) {
+        this.connections.add(user.id);
+        user.connections.add(this.id);
+        graph.insertEdge(this, user, JsonFileHandler.totalEdgesCounter++);
+        //TODO: update connectionID in json
+        //TODO: update connectionID in table
+    }
+
+    public void deleteExistingConnection(User user, AdjMapGraph<User, Integer> graph, JsonFileHandler fileHandler, Table<Integer, User> table) {
+        this.connections.remove(user.id);
+        user.connections.remove(this.id);
+        graph.removeEdge(graph.getEdge(this, user));
+        //TODO: update connectionID in json
+        //TODO: update connectionID in table
     }
 }
