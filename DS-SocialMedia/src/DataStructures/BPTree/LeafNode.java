@@ -2,49 +2,48 @@ package src.DataStructures.BPTree;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ListIterator;
 
 public class LeafNode<K extends Comparable<K>, T> extends Node<K, T> {
-    protected ArrayList<T> values;
-    protected LeafNode<K,T> nextLeaf;
-    protected LeafNode<K,T> previousLeaf;
+    public ArrayList<T> values;
+    public LeafNode<K, T> nextLeaf;
+    public LeafNode<K, T> previousLeaf;
 
     public LeafNode(K firstKey, T firstValue) {
         isLeafNode = true;
-        keys = new ArrayList<K>();
-        values = new ArrayList<T>();
+        keys = new ArrayList<>();
+        values = new ArrayList<>();
         keys.add(firstKey);
         values.add(firstValue);
-
     }
 
     public LeafNode(List<K> newKeys, List<T> newValues) {
         isLeafNode = true;
-        keys = new ArrayList<K>(newKeys);
-        values = new ArrayList<T>(newValues);
-
+        keys = new ArrayList<>(newKeys);
+        values = new ArrayList<>(newValues);
     }
 
-
     public void insertSorted(K key, T value) {
-        if (key.compareTo(keys.get(0)) < 0) {
-            keys.add(0, key);
-            values.add(0, value);
-        } else if (key.compareTo(keys.get(keys.size() - 1)) > 0) {
-            keys.add(key);
-            values.add(value);
-        } else {
-            ListIterator<K> iterator = keys.listIterator();
-            while (iterator.hasNext()) {
-                if (iterator.next().compareTo(key) > 0) {
-                    int position = iterator.previousIndex();
-                    keys.add(position, key);
-                    values.add(position, value);
-                    break;
-                }
-            }
+        int position = 0;
+        while (position < keys.size() && key.compareTo(keys.get(position)) > 0) {
+            position++;
+        }
 
+        if (position >= keys.size() || !keys.get(position).equals(key)) {
+            keys.add(position, key);
+            values.add(position, value);
+        } else {
+            keys.add(position + 1, key);
+            values.add(position + 1, value);
         }
     }
 
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("LeafNode{keys=").append(keys)
+                .append(", values=").append(values)
+                .append("}");
+        return sb.toString();
+    }
 }
