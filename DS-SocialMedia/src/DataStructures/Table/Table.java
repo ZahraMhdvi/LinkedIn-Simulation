@@ -1,10 +1,10 @@
-package src.DataStructures.Table;
+package DataStructures.Table;
 
-import src.DataStructures.BPTree.BPlusTree;
-import src.DataStructures.BPTree.IndexNode;
-import src.DataStructures.BPTree.LeafNode;
-import src.DataStructures.BPTree.Node;
-import src.User.User;
+import DataStructures.BPTree.BPlusTree;
+import DataStructures.BPTree.IndexNode;
+import DataStructures.BPTree.LeafNode;
+import DataStructures.BPTree.Node;
+import User.User;
 
 import java.util.*;
 

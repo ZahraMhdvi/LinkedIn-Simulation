@@ -1,4 +1,4 @@
-package src.User;
+package User;
 
 import java.util.List;
 import java.util.Set;

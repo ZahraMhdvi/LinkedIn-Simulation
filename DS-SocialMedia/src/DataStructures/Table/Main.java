@@ -1,6 +1,6 @@
-package src.DataStructures.Table;
+package DataStructures.Table;
 
-import src.User.User;
+import User.User;
 
 import java.util.List;
 import java.util.Set;

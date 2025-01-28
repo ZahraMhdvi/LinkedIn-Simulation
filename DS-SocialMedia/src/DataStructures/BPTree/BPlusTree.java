@@ -1,4 +1,4 @@
-package src.DataStructures.BPTree;
+package DataStructures.BPTree;
 
 import java.util.AbstractMap;
 import java.util.ArrayList;
