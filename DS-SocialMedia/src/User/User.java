@@ -1,8 +1,8 @@
-package src.User;
+package User;
 
-import src.DataStructures.Graph.AdjMapGraph;
-import src.DataStructures.Table.Table;
-import src.File.JsonFileHandler;
+import DataStructures.Graph.AdjMapGraph;
+import DataStructures.Table.Table;
+import File.JsonFileHandler;
 
 import java.util.HashSet;
 import java.util.List;
@@ -111,8 +111,7 @@ public class User {
         this.connections.add(user.id);
         user.connections.add(this.id);
         graph.insertEdge(this, user, JsonFileHandler.totalEdgesCounter++);
-        //TODO: update connectionID in json
-
+        fileHandler.writeConnectionInJson(getId(), user.getId());
         table.delete(this.id);
         table.delete(user.id);
         table.insert(this.id, this);

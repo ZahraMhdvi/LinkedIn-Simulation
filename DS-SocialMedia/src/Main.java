@@ -1,9 +1,7 @@
-package src;
-
-import src.DataStructures.Graph.AdjMapGraph;
-import src.DataStructures.Table.Table;
-import src.File.JsonFileHandler;
-import src.User.User;
+import DataStructures.Graph.AdjMapGraph;
+import DataStructures.Table.Table;
+import File.JsonFileHandler;
+import User.User;
 
 import java.util.*;
 
@@ -21,5 +19,8 @@ public class Main {
         fileHandler.constructDefaultTable(userTable);
         //userTable.displayTable();
         fileHandler.constructDefaultGraph(usersGraph);
+        User us = fileHandler.getInitialMap().get(1);
+        us.addNewConnection(fileHandler.getInitialMap().get(3), usersGraph, fileHandler, userTable);
+        userTable.displayTable();
     }
 }
