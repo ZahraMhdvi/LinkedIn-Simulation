@@ -68,6 +68,7 @@ public class Table<K extends Comparable<K>, T> {
     }
 
 
+
     private LeafNode<K, T> getLeftmostLeafNode() {
         Node<K, T> current = (Node<K, T>) bPlusTree.root;
 
@@ -77,15 +78,18 @@ public class Table<K extends Comparable<K>, T> {
 
         return (LeafNode<K, T>) current;
     }
+
+
     private void displayLeafNode(LeafNode<K, T> leaf) {
-        for (int i = 0; i < leaf.getKeys().size(); i++) {
-            K key = leaf.getKeys().get(i);
-            T value = leaf.values.get(i);
+        List<K> sortedKeys = new ArrayList<>(leaf.getKeys());
+        Collections.sort(sortedKeys);
+
+        for (K key : sortedKeys) {
+            int index = leaf.getKeys().indexOf(key);
+            T value = leaf.values.get(index);
             System.out.println("Key: " + key + ", Data: " + value);
         }
     }
-
-
 
 
 
