@@ -1,4 +1,4 @@
-package src.DataStructures.Graph;
+package DataStructures.Graph;
 
 import java.util.*;
 

@@ -1,4 +1,4 @@
-package src.DataStructures.Table;
+package DataStructures.Table;
 
 import java.util.HashMap;
 import java.util.Map;
