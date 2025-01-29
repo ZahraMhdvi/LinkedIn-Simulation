@@ -103,4 +103,10 @@ public class UserPanel {
         setCurrentUser(loggedInUser);
     }
 
+    public void displayAuthMenu() {
+        System.out.println();
+        System.out.println("\033[94m" + "Connect, " + "\033[0m" + "Grow, " + "\033[94m" + "Succeed" + "\033[0m" + "!\nYour Network, " + "\033[94m" + "Your Power!" + "\033[0m");
+        System.out.println();
+        System.out.println("Welcome!");
+    }
 }
