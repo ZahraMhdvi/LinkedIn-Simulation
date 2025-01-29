@@ -1,10 +1,11 @@
-package DataStructures.Table;
+package src.DataStructures.Table;
 
-import DataStructures.BPTree.BPlusTree;
-import DataStructures.BPTree.IndexNode;
-import DataStructures.BPTree.LeafNode;
-import DataStructures.BPTree.Node;
-import User.User;
+import src.DataStructures.BPTree.BPlusTree;
+import src.DataStructures.BPTree.IndexNode;
+
+import src.DataStructures.BPTree.Node;
+import src.User.User;
+import src.DataStructures.BPTree.LeafNode;
 
 import java.util.*;
 
@@ -96,30 +97,13 @@ public class Table<K extends Comparable<K>, T> {
 
 
 
-    private void displayAllNodes(LeafNode<K, T> leaf) {
-        for (int i = 0; i < leaf.getKeys().size(); i++) {
-            K key = leaf.getKeys().get(i);
-            T value = leaf.values.get(i);
-            System.out.println("Key: " + key + ", Data: " + value);
-        }
-    }
 
 
 
 
 
-    private void collectNodesRecursive(Node<K, T> node, List<Node<K, T>> nodes) {
-        if (node == null) return;
 
-        nodes.add(node);
 
-        if (!node.isLeafNode()) {
-            IndexNode<K, T> indexNode = (IndexNode<K, T>) node;
-            for (Node<K, T> child : indexNode.children) {
-                collectNodesRecursive(child, nodes);
-            }
-        }
-    }
 
 
 }
