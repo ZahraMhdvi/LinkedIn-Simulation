@@ -77,4 +77,13 @@ public class UserPanel {
         getUsersGraph().insertVertex(newUser);
         getFileHandler().addUserToJson(newUser);
     }
+
+    public void logout() {
+        if (getCurrentUser() == null) {
+            System.out.println("No user is currently logged in.");
+            return;
+        }
+        setCurrentUser(null);
+        System.out.println("logging out was successful!");
+    }
 }
