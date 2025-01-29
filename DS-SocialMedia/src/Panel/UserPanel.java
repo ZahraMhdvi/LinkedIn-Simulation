@@ -6,6 +6,7 @@ import File.JsonFileHandler;
 import User.User;
 
 import java.util.List;
+import java.util.Scanner;
 import java.util.Set;
 
 public class UserPanel {
