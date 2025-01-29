@@ -33,22 +33,14 @@ public class Table<K extends Comparable<K>, T> {
         bPlusTree.delete(key);
     }
 
-    public void search(K key) {
+    public List<Node<K, T>> search(K key) {
         List<Node<K, T>> nodes = bPlusTree.search(key);
 
         if (nodes.isEmpty()) {
             System.out.println("No records found for key: " + key);
+            return null;
         } else {
-            System.out.println("Search Results for Key: " + key);
-            System.out.println("---------------------------------------------------");
-
-            for (Node<K, T> node : nodes) {
-                if (node.isLeafNode()) {
-                    displayMatchingLeafNode((LeafNode<K, T>) node, key);
-                }
-            }
-
-            System.out.println("---------------------------------------------------");
+            return nodes;
         }
     }
 
