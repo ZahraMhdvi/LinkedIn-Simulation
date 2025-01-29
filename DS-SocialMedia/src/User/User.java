@@ -1,9 +1,10 @@
-package User;
+package src.User;
 
-import DataStructures.Graph.AdjMapGraph;
-import DataStructures.Table.Table;
-import File.JsonFileHandler;
+import src.DataStructures.Graph.AdjMapGraph;
+import src.DataStructures.Table.Table;
+import src.File.JsonFileHandler;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -89,7 +90,7 @@ public class User {
         this.field = field;
         this.workplace = workplace;
         this.specialties = specialties;
-        this.connections = connections;
+        this.connections = new HashSet<>(connections);
     }
 
     @Override
@@ -111,7 +112,11 @@ public class User {
         user.connections.add(this.id);
         graph.insertEdge(this, user, JsonFileHandler.totalEdgesCounter++);
         //TODO: update connectionID in json
-        //TODO: update connectionID in table
+
+        table.delete(this.id);
+        table.delete(user.id);
+        table.insert(this.id, this);
+        table.insert(user.id, user);
     }
 
     public void deleteExistingConnection(User user, AdjMapGraph<User, Integer> graph, JsonFileHandler fileHandler, Table<Integer, User> table) {
@@ -119,6 +124,10 @@ public class User {
         user.connections.remove(this.id);
         graph.removeEdge(graph.getEdge(this, user));
         //TODO: update connectionID in json
-        //TODO: update connectionID in table
+
+        table.delete(this.id);
+        table.delete(user.id);
+        table.insert(this.id, this);
+        table.insert(user.id, user);
     }
 }

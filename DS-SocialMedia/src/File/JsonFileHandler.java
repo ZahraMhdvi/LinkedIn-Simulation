@@ -1,8 +1,8 @@
-package File;
+package src.File;
 
-import DataStructures.Graph.AdjMapGraph;
-import DataStructures.Table.Table;
-import User.User;
+import src.DataStructures.Graph.AdjMapGraph;
+import src.DataStructures.Table.Table;
+import src.User.User;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;

@@ -1,7 +1,9 @@
-import DataStructures.Graph.AdjMapGraph;
-import DataStructures.Table.Table;
-import File.JsonFileHandler;
-import User.User;
+package src;
+
+import src.DataStructures.Graph.AdjMapGraph;
+import src.DataStructures.Table.Table;
+import src.File.JsonFileHandler;
+import src.User.User;
 
 import java.util.*;
 

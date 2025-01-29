@@ -9,8 +9,5 @@
         <module name="ds-finalproject-socialmedia-ds-haters" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="ds-finalproject-socialmedia-ds-haters" target="17" />
-    </bytecodeTargetLevel>
   </component>
 </project>
