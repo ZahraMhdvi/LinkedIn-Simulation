@@ -75,7 +75,7 @@ public class JsonFileHandler {
         }
     }
 
-    public void addUserToJson(User newUser) { //TODO: check this when signup method is written
+    public void addUserToJson(User newUser) {
         JSONObject object = new JSONObject();
         object.put("id", String.valueOf(newUser.getId()));
         object.put("name", newUser.getName());

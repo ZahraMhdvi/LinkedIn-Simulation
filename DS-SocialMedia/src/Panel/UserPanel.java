@@ -86,4 +86,21 @@ public class UserPanel {
         setCurrentUser(null);
         System.out.println("logging out was successful!");
     }
+
+    public void login(int id, String name) {
+        User loggedInUser = null;
+        for (User user : getUsersGraph().vertices()) {
+            if (user.getId() == id)
+                loggedInUser = user;
+        }
+        if (loggedInUser == null) {
+            System.out.println("User not found. try logging in again or signing up.");
+            return;
+        } else if (!loggedInUser.getName().equalsIgnoreCase(name)) {
+            System.out.println("Wrong name!");
+            return;
+        }
+        setCurrentUser(loggedInUser);
+    }
+
 }
