@@ -127,7 +127,5 @@ public class User {
 
         table.delete(this.id);
         table.delete(user.id);
-        table.insert(this.id, this);
-        table.insert(user.id, user);
     }
 }
