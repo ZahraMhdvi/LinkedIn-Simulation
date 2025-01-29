@@ -122,8 +122,7 @@ public class User {
         this.connections.remove(user.id);
         user.connections.remove(this.id);
         graph.removeEdge(graph.getEdge(this, user));
-        //TODO: update connectionID in json
-
+        fileHandler.deleteConnectionInJson(getId(), user.getId());
         table.delete(this.id);
         table.delete(user.id);
     }

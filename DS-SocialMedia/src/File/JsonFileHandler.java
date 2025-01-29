@@ -126,4 +126,35 @@ public class JsonFileHandler {
             System.out.println("error in writing new connection in json");
         }
     }
+
+    public void deleteConnectionInJson(int firstID, int secondID) {
+        try {
+            JSONArray array = (JSONArray) jsonParser.parse(new FileReader("users.json"));
+            for (Object userInFile : array) {
+                JSONObject user = (JSONObject) userInFile;
+                if (String.valueOf(user.get("id")).equals(String.valueOf(firstID)) || String.valueOf(user.get("id")).equals(String.valueOf(secondID))) {
+                    JSONArray connectionId = (JSONArray) user.get("connectionId");
+                    Set<Integer> IDsSet = new HashSet<>();
+                    for (Object IDs : connectionId) {
+                        IDsSet.add(Integer.parseInt(IDs.toString()));
+                    }
+                    if (String.valueOf(user.get("id")).equals(String.valueOf(firstID))) {
+                        IDsSet.remove(secondID);
+                    }
+                    if (String.valueOf(user.get("id")).equals(String.valueOf(secondID))) {
+                        IDsSet.remove(firstID);
+                    }
+                    JSONArray newConIDs = new JSONArray();
+                    newConIDs.addAll(IDsSet);
+                    user.put("connectionId", newConIDs);
+                }
+            }
+            try (FileWriter fileWriter = new FileWriter("users.json")) {
+                fileWriter.write(array.toJSONString());
+                fileWriter.flush();
+            }
+        } catch (Exception e) {
+            System.out.println("error in writing new connection in json");
+        }
+    }
 }
