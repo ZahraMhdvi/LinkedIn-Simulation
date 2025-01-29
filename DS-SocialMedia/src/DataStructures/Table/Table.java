@@ -27,7 +27,6 @@ public class Table<K extends Comparable<K>, T> {
     }
 
 
-
     public void delete(K key) {
         bPlusTree.delete(key);
     }
@@ -68,7 +67,6 @@ public class Table<K extends Comparable<K>, T> {
     }
 
 
-
     private LeafNode<K, T> getLeftmostLeafNode() {
         Node<K, T> current = (Node<K, T>) bPlusTree.root;
 
@@ -90,15 +88,4 @@ public class Table<K extends Comparable<K>, T> {
             System.out.println("Key: " + key + ", Data: " + value);
         }
     }
-
-
-
-
-
-
-
-
-
-
-
 }

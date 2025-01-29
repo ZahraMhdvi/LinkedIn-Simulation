@@ -89,8 +89,19 @@ public class JsonFileHandler {
         connectionIDs.addAll(newUser.getConnections());
         object.put("specialties", specialties);
         object.put("connectionId", connectionIDs);
+
+        JSONArray usersArray = new JSONArray();
+        try (FileReader fileReader = new FileReader("users.json")) {
+            Object obj = jsonParser.parse(fileReader);
+            if (obj instanceof JSONArray) {
+                usersArray = (JSONArray) obj;
+            }
+        } catch (IOException | ParseException e) {
+            System.out.println("Error reading existing user data");
+        }
+        usersArray.add(object);
         try (FileWriter fileWriter = new FileWriter("users.json");) {
-            fileWriter.write(object.toJSONString());
+            fileWriter.write(usersArray.toJSONString());
         } catch (IOException e) {
             System.out.println("error in writing new user's info in the json file");
         }

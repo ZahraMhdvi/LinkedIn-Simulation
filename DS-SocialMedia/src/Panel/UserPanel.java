@@ -6,6 +6,7 @@ import File.JsonFileHandler;
 import User.User;
 
 import java.util.List;
+import java.util.Set;
 
 public class UserPanel {
 
@@ -67,5 +68,13 @@ public class UserPanel {
 
     public void setUsersGraph(AdjMapGraph<User, Integer> usersGraph) {
         this.usersGraph = usersGraph;
+    }
+
+    public void signUp(String name, String dateOfBirth, String universityLocation, String field, String workplace, List<String> specialties, Set<Integer> connections) {
+        User newUser = new User(getUsersGraph().numVertices() + 1, name, dateOfBirth, universityLocation, field, workplace, specialties, connections);
+        setCurrentUser(newUser);
+        getUserTable().insert(newUser.getId(), newUser);
+        getUsersGraph().insertVertex(newUser);
+        getFileHandler().addUserToJson(newUser);
     }
 }
