@@ -143,7 +143,6 @@ public class MainMenu {
         System.out.print("Specialties: ");
         priorityWeights.put("specialties", scanner.nextInt());
 
-        // نمایش پیشنهادات سفارشی
         System.out.println("\n=== Custom Suggestions for User ===");
         ArrayList<Entry> suggestions =
                 userPanel.getCurrentUser().customSuggestion(userPanel.getCurrentUser(), priorityWeights);
