@@ -282,13 +282,28 @@ public class User {
 
     private int calculateScore(Entry user, User currentUser) {
         int score = 0;
-        if (user.getValue().getField().equalsIgnoreCase(currentUser.getField()))
-            score++;
-        if (user.getValue().getWorkplace().equalsIgnoreCase(currentUser.getWorkplace()))
-            score++;
+        score = fieldScore(user, currentUser, score);
+        score = workScore(user, currentUser, score);
+        score = universityScore(user, currentUser, score);
+        score = specialityScore(user, currentUser, score);
+        return score;
+    }
+
+    private static int universityScore(Entry user, User currentUser, int score) {
         if (user.getValue().getUniversityLocation().equalsIgnoreCase(currentUser.getUniversityLocation()))
             score++;
-        score = specialityScore(user, currentUser, score);
+        return score;
+    }
+
+    private static int workScore(Entry user, User currentUser, int score) {
+        if (user.getValue().getWorkplace().equalsIgnoreCase(currentUser.getWorkplace()))
+            score++;
+        return score;
+    }
+
+    private static int fieldScore(Entry user, User currentUser, int score) {
+        if (user.getValue().getField().equalsIgnoreCase(currentUser.getField()))
+            score++;
         return score;
     }
 
