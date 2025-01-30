@@ -1,5 +1,6 @@
 package Panel;
 
+import DataStructures.BPTree.Node;
 import DataStructures.Graph.AdjMapGraph;
 import DataStructures.Table.Table;
 import File.JsonFileHandler;
@@ -216,4 +217,79 @@ public class UserPanel {
                 return null;
         }
     }
+
+    public void displayTableMenu(Scanner scanner) {
+        while (true) {
+            System.out.println("\n=== Table Management Menu ===");
+            System.out.println("1. Create Table");
+            System.out.println("2. Insert Row");
+            System.out.println("3. Delete Row");
+            System.out.println("4. Display Table");
+            System.out.println("5. Back to Main Menu");
+            System.out.print("Enter your choice: ");
+            int choice = scanner.nextInt();
+            scanner.nextLine();
+
+            switch (choice) {
+                case 1:
+                    System.out.print("Enter table name: ");
+                    String tableName = scanner.nextLine();
+                    createTable(tableName, scanner);
+                    break;
+                case 2:
+                    System.out.print("Enter table name: ");
+                    tableName = scanner.nextLine();
+                    insertIntoTable(tableName, scanner);
+                    break;
+                case 3:
+                    System.out.print("Enter table name: ");
+                    tableName = scanner.nextLine();
+                    System.out.print("Enter row ID to delete: ");
+                    int rowId = scanner.nextInt();
+                    scanner.nextLine();
+                    deleteRowFromTable(tableName, rowId);
+                    break;
+                case 4:
+                    System.out.print("Enter table name: ");
+                    tableName = scanner.nextLine();
+                    displayTable(tableName);
+                    break;
+                case 5:
+                    return;
+                default:
+                    System.out.println("Invalid choice! Please try again.");
+            }
+        }
+    }
+
+
+    public void displayUserDetails(int userId) {
+        List<Node<Integer, User>> user = userTable.search(userId);
+
+        if (user == null) {
+            System.out.println("❌ User not found!");
+            return;
+        }
+
+
+        System.out.println("\n=== User Details ===");
+        System.out.println(user);
+    }
+
+    public void displayUserList() {
+        System.out.println("\n=== User List ===");
+        for (User user : usersGraph.vertices()) {
+            System.out.println("ID: " + user.getId() + ", Name: " + user.getName());
+        }
+    }
+
+    public void displaySuggestionsForUser(int userId) {
+        //TODO suggestion
+    }
+
+    public void displaySuggestionsForCurrentUser() {
+        //TODO suggestion
+    }
+
+
 }
