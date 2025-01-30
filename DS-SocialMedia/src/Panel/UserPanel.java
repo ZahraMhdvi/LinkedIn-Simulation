@@ -14,8 +14,7 @@ public class UserPanel {
     private static UserPanel userPanel;
     private Table<Integer, User> userTable;
     private JsonFileHandler fileHandler;
-    private AdjMapGraph<User, Integer> usersGraph;
-    private Map<String, DynamicTable<Integer, Object>> tables;
+    private static AdjMapGraph<User, Integer> usersGraph;
 
 
     public UserPanel() {
@@ -28,7 +27,6 @@ public class UserPanel {
         this.usersGraph = new AdjMapGraph<>();
         fileHandler.constructDefaultTable(userTable);
         fileHandler.constructDefaultGraph(usersGraph);
-        this.tables=new HashMap<>();
     }
 
     public static UserPanel getUserPanel() {
@@ -111,111 +109,8 @@ public class UserPanel {
         System.out.println("\033[94m" + "Connect, " + "\033[0m" + "Grow, " + "\033[94m" + "Succeed" + "\033[0m" + "!\nYour Network, " + "\033[94m" + "Your Power!" + "\033[0m");
         System.out.println();
         System.out.println("Welcome!");
-    }
-
-
-
-
-
-
-    public void createTable(String tableName, Scanner scanner) {
-        if (tables.containsKey(tableName)) {
-            System.out.println("❌Table already exists!");
-            return;
-        }
-
-        System.out.println("Enter number of columns:");
-        int columnCount = scanner.nextInt();
-        scanner.nextLine();
-
-        Map<String, DataType> columnDataTypes = new LinkedHashMap<>();
-
-        for (int i = 0; i < columnCount; i++) {
-            System.out.println("Enter column name " + (i + 1) + ":");
-            String columnName = scanner.nextLine();
-
-            System.out.println("Enter data type for \"" + columnName + "\" (INTEGER, DOUBLE, FLOAT, STRING, DATE):");
-            String dataTypeStr = scanner.nextLine().toUpperCase();
-
-            DataType dataType;
-            try {
-                dataType = DataType.valueOf(dataTypeStr);
-            } catch (IllegalArgumentException e) {
-                System.out.println("❌ Invalid data type! Using STRING by default.");
-                dataType = DataType.STRING;
-            }
-
-            columnDataTypes.put(columnName, dataType);
-        }
-
-        tables.put(tableName, new DynamicTable<>(tableName, columnDataTypes));
-        System.out.println("✅Table \"" + tableName + "\" created successfully!");
-    }
-
-    public void insertIntoTable(String tableName, Scanner scanner) {
-        DynamicTable<Integer, Object> table = tables.get(tableName);
-
-        if (table == null) {
-            System.out.println("❌ Table not found!");
-            return;
-        }
-
-        int rowId = table.getNextId();
-        Map<String, Object> rowData = new LinkedHashMap<>();
-
-        System.out.println("\nInserting row with ID: " + rowId);
-        for (Map.Entry<String, DataType> entry : table.getColumnDataTypes().entrySet()) {
-            String columnName = entry.getKey();
-            DataType dataType = entry.getValue();
-            System.out.println("Enter value for " + columnName + " (" + dataType + "):");
-
-            Object value = getInputValue(scanner, dataType);
-            rowData.put(columnName, value);
-        }
-
-        table.insert(rowId, rowData);
-        System.out.println("✅ Row inserted successfully!");
-    }
-
-    public void deleteRowFromTable(String tableName, int id) {
-        DynamicTable<Integer, Object> table = tables.get(tableName);
-
-        if (table == null) {
-            System.out.println("❌ Table not found!");
-            return;
-        }
-
-        table.delete(id);
-        System.out.println("✅ Row with ID " + id + " deleted successfully!");
-    }
-
-    public void displayTable(String tableName) {
-        DynamicTable<Integer, Object> table = tables.get(tableName);
-
-        if (table == null) {
-            System.out.println("❌ Table not found!");
-            return;
-        }
-
-        table.displayTable();
-    }
-
-    private Object getInputValue(Scanner scanner, DataType dataType) {
-        switch (dataType) {
-            case INTEGER:
-                return scanner.nextInt();
-            case DOUBLE:
-                return scanner.nextDouble();
-            case FLOAT:
-                return scanner.nextFloat();
-            case STRING:
-                return scanner.next();
-            case DATE:
-                System.out.println("Enter date (YYYY-MM-DD):");
-                return scanner.next();
-            default:
-                return null;
-        }
+        System.out.println();
+        System.out.println("1. Login\n2. Sign Up");
     }
 
     public void displayTableMenu(Scanner scanner) {
@@ -234,12 +129,12 @@ public class UserPanel {
                 case 1:
                     System.out.print("Enter table name: ");
                     String tableName = scanner.nextLine();
-                    createTable(tableName, scanner);
+                    getCurrentUser().createTable(tableName, scanner);
                     break;
                 case 2:
                     System.out.print("Enter table name: ");
                     tableName = scanner.nextLine();
-                    insertIntoTable(tableName, scanner);
+                    getCurrentUser().insertIntoTable(tableName, scanner);
                     break;
                 case 3:
                     System.out.print("Enter table name: ");
@@ -247,12 +142,12 @@ public class UserPanel {
                     System.out.print("Enter row ID to delete: ");
                     int rowId = scanner.nextInt();
                     scanner.nextLine();
-                    deleteRowFromTable(tableName, rowId);
+                    getCurrentUser().deleteRowFromTable(tableName, rowId);
                     break;
                 case 4:
                     System.out.print("Enter table name: ");
                     tableName = scanner.nextLine();
-                    displayTable(tableName);
+                    getCurrentUser().displayTable(tableName);
                     break;
                 case 5:
                     return;
@@ -271,7 +166,6 @@ public class UserPanel {
             return;
         }
 
-
         System.out.println("\n=== User Details ===");
         System.out.println(user);
     }
@@ -284,12 +178,32 @@ public class UserPanel {
     }
 
     public void displaySuggestionsForUser(int userId) {
-        //TODO suggestion
+        User wantedUser = null;
+        for (User user : getUsersGraph().vertices()) {
+            if (user.getId() == userId)
+                wantedUser = user;
+        }
+        if (wantedUser != null) {
+            int counter = 1;
+            for (Entry entry : wantedUser.finalNormalSuggestion(wantedUser)) {
+                System.out.println(counter++ + ". " + entry.getValue());
+                if (counter == 21)
+                    break;
+            }
+        } else System.out.println("User with this ID does not exist!");
     }
 
     public void displaySuggestionsForCurrentUser() {
-        //TODO suggestion
+        if (getCurrentUser() == null)
+            System.out.println("you're not logged in! please try logging in or signing up first.");
+        else {
+            int counter = 1;
+            for (Entry entry : getCurrentUser().finalNormalSuggestion(getCurrentUser())) {
+                System.out.println(counter++ + ". " + entry.getValue());
+                if (counter == 21)
+                    break;
+            }
+        }
     }
-
 
 }
