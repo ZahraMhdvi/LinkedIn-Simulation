@@ -260,8 +260,13 @@ public class User {
                 if (UserPanel.getUserPanel().getUsersGraph().getEdge(user, entry.getValue()) == null && !entry.getValue().equals(user))
                     user.getNormalSuggestedUsers().add(entry);
             }
+            sortSuggestedList(user.getNormalSuggestedUsers());
         }
         return user.getNormalSuggestedUsers();
+    }
+
+    private void sortSuggestedList(ArrayList<Entry> suggestedUsers) {
+        suggestedUsers.sort(Comparator.comparingInt(Entry::getKey).reversed());
     }
 
     private void updateScores(User user, ArrayList<Entry> bfsMap) {
