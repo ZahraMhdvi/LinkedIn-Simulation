@@ -18,10 +18,7 @@ public class UserPanel {
 
 
     public UserPanel() {
-        List<String> defaultColumns = List.of(
-                "id", "name", "dateOfBirth", "universityLocation", "field",
-                "workplace", "specialties", "connections"
-        );
+        List<String> defaultColumns = List.of("id", "name", "dateOfBirth", "universityLocation", "field", "workplace", "specialties", "connections");
         this.userTable = new Table<>("Default User Table", defaultColumns);
         this.fileHandler = new JsonFileHandler();
         usersGraph = new AdjMapGraph<>();
@@ -30,8 +27,7 @@ public class UserPanel {
     }
 
     public static UserPanel getUserPanel() {
-        if (userPanel == null)
-            userPanel = new UserPanel();
+        if (userPanel == null) userPanel = new UserPanel();
         return userPanel;
     }
 
@@ -91,8 +87,7 @@ public class UserPanel {
     public void login(int id, String name) {
         User loggedInUser = null;
         for (User user : getUsersGraph().vertices()) {
-            if (user.getId() == id)
-                loggedInUser = user;
+            if (user.getId() == id) loggedInUser = user;
         }
         if (loggedInUser == null) {
             System.out.println("User not found. try logging in again or signing up.");
@@ -173,15 +168,13 @@ public class UserPanel {
     public void displaySuggestionsForUser(int userId) {
         User wantedUser = null;
         for (User user : getUsersGraph().vertices()) {
-            if (user.getId() == userId)
-                wantedUser = user;
+            if (user.getId() == userId) wantedUser = user;
         }
         if (wantedUser != null) {
             int counter = 1;
             for (Entry entry : wantedUser.finalNormalSuggestion(wantedUser)) {
                 System.out.println(counter++ + ". " + entry.getValue());
-                if (counter == 21)
-                    break;
+                if (counter == 21) break;
             }
         } else System.out.println("User with this ID does not exist!");
     }
@@ -193,8 +186,7 @@ public class UserPanel {
             int counter = 1;
             for (Entry entry : getCurrentUser().finalNormalSuggestion(getCurrentUser())) {
                 System.out.println(counter++ + ". " + entry.getValue());
-                if (counter == 21)
-                    break;
+                if (counter == 21) break;
             }
         }
     }

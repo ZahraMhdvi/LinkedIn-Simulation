@@ -108,7 +108,7 @@ public class User {
         this.workplace = workplace;
         this.specialties = specialties;
         this.connections = new HashSet<>(connections);
-        this.tables=new HashMap<>();
+        this.tables = new HashMap<>();
         this.normalSuggestedUsers = new ArrayList<>();
         this.hasEditedConnections = false;
     }
@@ -209,6 +209,7 @@ public class User {
         table.insert(rowId, rowData);
         System.out.println("✅ Row inserted successfully!");
     }
+
     private Object getInputValue(Scanner scanner, DataType dataType) {
         switch (dataType) {
             case INTEGER:
@@ -385,7 +386,7 @@ public class User {
     }
 
     private int weightedWorkScore(Entry entry, User currentUser, int weight) {
-        if(entry.getValue().getWorkplace().equalsIgnoreCase(currentUser.getWorkplace()))
+        if (entry.getValue().getWorkplace().equalsIgnoreCase(currentUser.getWorkplace()))
             return weight;
         else return 0;
     }

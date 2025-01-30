@@ -135,8 +135,7 @@ public class MainMenu {
         priorityWeights.put("specialties", scanner.nextInt());
 
         System.out.println("\n=== Custom Suggestions for User ===");
-        ArrayList<Entry> suggestions =
-                userPanel.getCurrentUser().customSuggestion(userPanel.getCurrentUser(), priorityWeights);
+        ArrayList<Entry> suggestions = userPanel.getCurrentUser().customSuggestion(userPanel.getCurrentUser(), priorityWeights);
 
         if (suggestions.isEmpty()) {
             System.out.println("No suggestions found based on your preferences.");
