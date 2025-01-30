@@ -251,13 +251,24 @@ public class User {
 
     public Map<Integer, User> finalNormalSuggestion(User user) {
         if (user.getNormalSuggestedUsers().isEmpty() || user.hasEditedConnections) {
+            user.getNormalSuggestedUsers().clear();
             Map<Integer, User> bfsMap = new HashMap<>();
             fillBFSMap(bfsMap, user);
+            updateScores(user, bfsMap);
             for (Map.Entry<Integer, User> entry : bfsMap.entrySet()) {
-
+                if (UserPanel.getUserPanel().getUsersGraph().getEdge(user, entry.getValue()) == null && !entry.getValue().equals(user))
+                    user.getNormalSuggestedUsers().put(entry.getKey(), entry.getValue());
             }
         }
         return user.getNormalSuggestedUsers();
+    }
+
+    private void updateScores(User user, Map<Integer, User> bfsMap) {
+        for (Map.Entry<Integer, User> entry : bfsMap.entrySet()) {
+            int newScore = calculateScore(entry, user);
+            bfsMap.remove(entry.getKey());
+            bfsMap.put(newScore, entry.getValue());
+        }
     }
 
     private int calculateScore(Map.Entry<Integer, User> user, User currentUser) {
