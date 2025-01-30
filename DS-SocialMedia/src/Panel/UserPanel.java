@@ -194,7 +194,16 @@ public class UserPanel {
     }
 
     public void displaySuggestionsForCurrentUser() {
-        //TODO suggestion
+        if (getCurrentUser() == null)
+            System.out.println("you're not logged in! please try logging in or signing up first.");
+        else {
+            int counter = 1;
+            for (Entry entry : getCurrentUser().finalNormalSuggestion(getCurrentUser())) {
+                System.out.println(counter++ + ". " + entry.getValue());
+                if (counter == 21)
+                    break;
+            }
+        }
     }
 
 }
