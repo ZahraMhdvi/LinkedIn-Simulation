@@ -178,12 +178,21 @@ public class UserPanel {
     }
 
     public void displaySuggestionsForUser(int userId) {
-        //TODO suggestion
+        User wantedUser = null;
+        for (User user : getUsersGraph().vertices()) {
+            if (user.getId() == userId)
+                wantedUser = user;
+        }
+        if (wantedUser != null) {
+            int counter = 1;
+            for (Map.Entry<Integer, User> entry : wantedUser.finalNormalSuggestion(wantedUser).entrySet()) {
+                System.out.println(counter++ + ". " + entry.getValue());
+            }
+        } else System.out.println("User with this ID does not exist!");
     }
 
     public void displaySuggestionsForCurrentUser() {
         //TODO suggestion
     }
-
 
 }

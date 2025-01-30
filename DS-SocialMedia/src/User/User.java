@@ -264,10 +264,18 @@ public class User {
     }
 
     private void updateScores(User user, Map<Integer, User> bfsMap) {
-        for (Map.Entry<Integer, User> entry : bfsMap.entrySet()) {
+//        for (Map.Entry<Integer, User> entry : bfsMap.entrySet()) {
+//            int newScore = calculateScore(entry, user);
+//            int prevScore = entry.getKey();
+//            bfsMap.remove(entry.getKey());
+//            bfsMap.put(newScore + prevScore, entry.getValue());
+//        }
+        List<Map.Entry<Integer, User>> entriesToUpdate = new ArrayList<>(bfsMap.entrySet());
+        for (Map.Entry<Integer, User> entry : entriesToUpdate) {
             int newScore = calculateScore(entry, user);
+            int prevScore = entry.getKey();
             bfsMap.remove(entry.getKey());
-            bfsMap.put(newScore, entry.getValue());
+            bfsMap.put(newScore + prevScore, entry.getValue());
         }
     }
 
