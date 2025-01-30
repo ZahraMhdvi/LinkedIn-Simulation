@@ -24,7 +24,7 @@ public class UserPanel {
         );
         this.userTable = new Table<>("Default User Table", defaultColumns);
         this.fileHandler = new JsonFileHandler();
-        this.usersGraph = new AdjMapGraph<>();
+        usersGraph = new AdjMapGraph<>();
         fileHandler.constructDefaultTable(userTable);
         fileHandler.constructDefaultGraph(usersGraph);
     }
@@ -68,7 +68,7 @@ public class UserPanel {
     }
 
     public void setUsersGraph(AdjMapGraph<User, Integer> usersGraph) {
-        this.usersGraph = usersGraph;
+        UserPanel.usersGraph = usersGraph;
     }
 
     public void signUp(String name, String dateOfBirth, String universityLocation, String field, String workplace, List<String> specialties, Set<Integer> connections) {

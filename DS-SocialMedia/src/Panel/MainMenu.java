@@ -1,13 +1,13 @@
 package Panel;
 
 import java.util.*;
+
 import User.User;
 
 public class MainMenu {
 
     private static Scanner scanner = new Scanner(System.in);
     private static UserPanel userPanel = UserPanel.getUserPanel();
-
 
 
     public static void displayAuthMenu() {
@@ -23,17 +23,13 @@ public class MainMenu {
             scanner.nextLine();
 
             switch (choice) {
-                case 1:
-                    handleLogin();
-                    break;
-                case 2:
-                    handleSignUp();
-                    break;
-                case 3:
+                case 1 -> handleLogin();
+                case 2 -> handleSignUp();
+                case 3 -> {
                     System.out.println("Goodbye!");
                     return;
-                default:
-                    System.out.println("Invalid choice! Please try again.");
+                }
+                default -> System.out.println("Invalid choice! Please try again.");
             }
         }
     }
@@ -51,7 +47,7 @@ public class MainMenu {
             System.out.println("✅ Login successful!");
             displayMainMenu();
         } else {
-            System.out.println("❌ Login failed. Please try again.");
+            System.out.println("❌ Login failed.");
         }
     }
 
@@ -84,41 +80,34 @@ public class MainMenu {
             System.out.println("5. Manage Tables");
             System.out.println("6. View User List");
             System.out.println("7. View User Details");
-            System.out.println("8. Logout");
+            System.out.println("8. View Your Own Profile Info");
+            System.out.println("9. Logout");
 
             System.out.print("Enter your choice: ");
             int choice = scanner.nextInt();
             scanner.nextLine();
 
             switch (choice) {
-                case 1:
-                    userPanel.displaySuggestionsForCurrentUser();
-                    break;
-                case 2:
-                    displayCustomSuggestions();
-                    break;
-                case 3:
-                    displaySuggestionsForUser();
-                    break;
-                case 4:
-                    manageConnections();
-                    break;
-                case 5:
-                    userPanel.displayTableMenu(scanner);
-                    break;
-                case 6:
-                    displayUserList();
-                    break;
-                case 7:
+                case 1 -> userPanel.displaySuggestionsForCurrentUser();
+                case 2 -> displayCustomSuggestions();
+                case 3 -> displaySuggestionsForUser();
+                case 4 -> manageConnections();
+                case 5 -> userPanel.displayTableMenu(scanner);
+                case 6 -> displayUserList();
+                case 7 -> {
                     System.out.print("Enter user ID: ");
                     int userId = scanner.nextInt();
                     userPanel.displayUserDetails(userId);
-                    break;
-                case 8:
+                }
+                case 8 -> {
+                    System.out.println("Profile Info:");
+                    userPanel.displayUserDetails(userPanel.getCurrentUser().getId());
+                }
+                case 9 -> {
                     userPanel.logout();
                     return;
-                default:
-                    System.out.println("Invalid choice! Please try again.");
+                }
+                default -> System.out.println("Invalid choice! Please try again.");
             }
         }
     }
@@ -154,7 +143,7 @@ public class MainMenu {
         } else {
             int counter = 1;
             for (Entry entry : suggestions) {
-                System.out.println(counter++ + ". " + entry.getValue().getName()+" -> ID: "+entry.getValue().getId() + " (Score: " + entry.getKey() + ")");
+                System.out.println(counter++ + ". " + entry.getValue().getName() + " -> ID: " + entry.getValue().getId() + " (Score: " + entry.getKey() + ")");
             }
         }
     }
