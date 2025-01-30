@@ -170,13 +170,6 @@ public class UserPanel {
         System.out.println(user);
     }
 
-    public void displayUserList() {
-        System.out.println("\n=== User List ===");
-        for (User user : usersGraph.vertices()) {
-            System.out.println("ID: " + user.getId() + ", Name: " + user.getName());
-        }
-    }
-
     public void displaySuggestionsForUser(int userId) {
         User wantedUser = null;
         for (User user : getUsersGraph().vertices()) {
