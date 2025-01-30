@@ -14,7 +14,7 @@ public class UserPanel {
     private static UserPanel userPanel;
     private Table<Integer, User> userTable;
     private JsonFileHandler fileHandler;
-    private AdjMapGraph<User, Integer> usersGraph;
+    private static AdjMapGraph<User, Integer> usersGraph;
 
 
     public UserPanel() {
@@ -109,6 +109,7 @@ public class UserPanel {
         System.out.println("\033[94m" + "Connect, " + "\033[0m" + "Grow, " + "\033[94m" + "Succeed" + "\033[0m" + "!\nYour Network, " + "\033[94m" + "Your Power!" + "\033[0m");
         System.out.println();
         System.out.println("Welcome!");
+        System.out.println();
         System.out.println("1. Login\n2. Sign Up");
     }
 

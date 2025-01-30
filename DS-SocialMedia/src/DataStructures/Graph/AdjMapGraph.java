@@ -160,4 +160,13 @@ public class AdjMapGraph<V, E> implements Graph<V, E> {
             edges.values().remove(e);
         }
     }
+
+    public List<V> getNeighbors(V vertex) {
+        List<V> neighbors = new ArrayList<>();
+        if (getAdjacencyMap().containsKey(vertex)) {
+            Map<V, E> neighborsMap = getAdjacencyMap().get(vertex);
+            neighbors.addAll(neighborsMap.keySet());
+        }
+        return neighbors;
+    }
 }

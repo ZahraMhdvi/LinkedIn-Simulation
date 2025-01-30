@@ -18,6 +18,8 @@ public class User {
     private List<String> specialties;
     private Set<Integer> connections;
     private Map<String, DynamicTable<Integer, Object>> tables;
+    private Map<Integer, User> normalSuggestedUsers;
+    private boolean hasEditedConnections;
 
     public int getId() {
         return id;
@@ -83,6 +85,18 @@ public class User {
         this.connections = connections;
     }
 
+    public Map<Integer, User> getNormalSuggestedUsers() {
+        return normalSuggestedUsers;
+    }
+
+    public boolean getEditedConnections() {
+        return hasEditedConnections;
+    }
+
+    public void setEditedConnections(boolean editedConnections) {
+        this.hasEditedConnections = editedConnections;
+    }
+
     public User(int id, String name, String dateOfBirth, String universityLocation, String field, String workplace, List<String> specialties, Set<Integer> connections) {
         this.id = id;
         this.name = name;
@@ -93,6 +107,8 @@ public class User {
         this.specialties = specialties;
         this.connections = new HashSet<>(connections);
         this.tables=new HashMap<>();
+        this.normalSuggestedUsers = new HashMap<>();
+        this.hasEditedConnections = false;
     }
 
     @Override
@@ -118,6 +134,7 @@ public class User {
         table.delete(user.id);
         table.insert(this.id, this);
         table.insert(user.id, user);
+        setEditedConnections(true);
     }
 
     public void deleteExistingConnection(User user, AdjMapGraph<User, Integer> graph, JsonFileHandler fileHandler, Table<Integer, User> table) {
@@ -129,6 +146,7 @@ public class User {
         table.delete(user.id);
         table.insert(this.id, this);
         table.insert(user.id, user);
+        setEditedConnections(true);
     }
 
     public void createTable(String tableName, Scanner scanner) {
@@ -228,5 +246,12 @@ public class User {
         }
 
         table.displayTable();
+    }
+
+    public Map<Integer, User> finalNormalSuggestion(User user) {
+        if (user.getNormalSuggestedUsers().isEmpty() || user.hasEditedConnections) {
+            //todo: suggest
+        }
+        return user.getNormalSuggestedUsers();
     }
 }
