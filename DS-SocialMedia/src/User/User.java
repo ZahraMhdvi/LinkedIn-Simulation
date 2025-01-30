@@ -345,4 +345,60 @@ public class User {
         }
         return firstLevelSet;
     }
+
+    public ArrayList<Entry> customSuggestion(User user, Map<String, Integer> priorityWeights) {
+        if (user.getNormalSuggestedUsers().isEmpty() || user.hasEditedConnections) {
+            user.getNormalSuggestedUsers().clear();
+            ArrayList<Entry> bfsMap = new ArrayList<>();
+            fillBFSMap(bfsMap, user);
+            updateCustomScores(user, bfsMap, priorityWeights);
+
+            bfsMap.removeIf(entry -> user.getConnections().contains(entry.getValue().getId()));
+
+            sortSuggestedList(bfsMap);
+
+            int suggestionLimit = Math.min(20, bfsMap.size());
+            user.getNormalSuggestedUsers().addAll(bfsMap.subList(0, suggestionLimit));
+        }
+        return user.getNormalSuggestedUsers();
+    }
+
+    private void updateCustomScores(User user, ArrayList<Entry> bfsMap, Map<String, Integer> priorityWeights) {
+        for (Entry entry : bfsMap) {
+            int customScore = calculateCustomScore(entry, user, priorityWeights);
+            entry.setKey(customScore);
+        }
+    }
+
+    private int calculateCustomScore(Entry entry, User currentUser, Map<String, Integer> priorityWeights) {
+        int score = 0;
+        score += weightedUniversityScore(entry, currentUser, priorityWeights.getOrDefault("universityLocation", 1));
+        score += weightedWorkScore(entry, currentUser, priorityWeights.getOrDefault("workplace", 1));
+        score += weightedFieldScore(entry, currentUser, priorityWeights.getOrDefault("field", 1));
+        score += weightedSpecialityScore(entry, currentUser, priorityWeights.getOrDefault("specialties", 1));
+        return score;
+    }
+
+
+    private int weightedUniversityScore(Entry entry, User currentUser, int weight) {
+        return entry.getValue().getUniversityLocation().equalsIgnoreCase(currentUser.getUniversityLocation()) ? weight : 0;
+    }
+
+    private int weightedWorkScore(Entry entry, User currentUser, int weight) {
+        if(entry.getValue().getWorkplace().equalsIgnoreCase(currentUser.getWorkplace()))
+            return weight;
+        else return 0;
+    }
+
+    private int weightedFieldScore(Entry entry, User currentUser, int weight) {
+        if (entry.getValue().getField().equalsIgnoreCase(currentUser.getField()))
+            return weight;
+        return 0;
+    }
+
+    private int weightedSpecialityScore(Entry entry, User currentUser, int weight) {
+        long specialityMatchCount = currentUser.getSpecialties().stream().filter(specialty -> entry.getValue().getSpecialties().contains(specialty)).count();
+        return (int) (specialityMatchCount * weight);
+    }
+
 }
