@@ -12,8 +12,10 @@ public class MainMenu {
 
     public static void displayAuthMenu() {
         while (true) {
-            System.out.println("\n\033[94m" + "Connect, Grow, Succeed!" + "\033[0m");
-            System.out.println("\nWelcome!");
+            System.out.println();
+            System.out.println("\033[94m" + "Connect, " + "\033[0m" + "Grow, " + "\033[94m" + "Succeed" + "\033[0m" + "!\nYour Network, " + "\033[94m" + "Your Power!" + "\033[0m");
+            System.out.println();
+            System.out.println("Welcome!");
             System.out.println("\n1. Login\n2. Sign Up\n3. Exit");
             System.out.print("Enter your choice: ");
 
