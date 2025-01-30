@@ -253,9 +253,33 @@ public class User {
         if (user.getNormalSuggestedUsers().isEmpty() || user.hasEditedConnections) {
             Map<Integer, User> bfsMap = new HashMap<>();
             fillBFSMap(bfsMap, user);
+            for (Map.Entry<Integer, User> entry : bfsMap.entrySet()) {
+
+            }
         }
         return user.getNormalSuggestedUsers();
     }
+
+    private int calculateScore(Map.Entry<Integer, User> user, User currentUser) {
+        int score = 0;
+        if (user.getValue().getField().equalsIgnoreCase(currentUser.getField()))
+            score++;
+        if (user.getValue().getWorkplace().equalsIgnoreCase(currentUser.getWorkplace()))
+            score++;
+        if (user.getValue().getUniversityLocation().equalsIgnoreCase(currentUser.getUniversityLocation()))
+            score++;
+        score = specialityScore(user, currentUser, score);
+        return score;
+    }
+
+    private static int specialityScore(Map.Entry<Integer, User> user, User currentUser, int score) {
+        for (String speciality : currentUser.getSpecialties()) {
+            if (user.getValue().getSpecialties().contains(speciality))
+                score++;
+        }
+        return score;
+    }
+
 
     private void fillBFSMap(Map<Integer, User> bfsMap, User currentUser) {
         Set<User> levelZero = UserPanel.getUserPanel().getUsersGraph().getNeighbors(currentUser);
