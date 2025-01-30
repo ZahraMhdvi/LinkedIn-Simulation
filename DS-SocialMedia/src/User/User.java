@@ -259,6 +259,23 @@ public class User {
 
     private void fillBFSMap(Map<Integer, User> bfsMap, User currentUser) {
         Set<User> levelZero = UserPanel.getUserPanel().getUsersGraph().getNeighbors(currentUser);
+        Set<User> firstLevelSet = firstLevelBFS(bfsMap, currentUser, levelZero);
+        secondLevelBFS(bfsMap, currentUser, firstLevelSet);
+    }
+
+    private static void secondLevelBFS(Map<Integer, User> bfsMap, User currentUser, Set<User> firstLevelSet) {
+        Set<User> secondLevelSet = new HashSet<>();
+        for (User neighbor : firstLevelSet) {
+            secondLevelSet.addAll(UserPanel.getUserPanel().getUsersGraph().getNeighbors(neighbor));
+        }
+        secondLevelSet.remove(currentUser);
+        for (User neighbor2 : secondLevelSet) {
+            if (!firstLevelSet.contains(neighbor2))
+                bfsMap.put(1, neighbor2);
+        }
+    }
+
+    private static Set<User> firstLevelBFS(Map<Integer, User> bfsMap, User currentUser, Set<User> levelZero) {
         Set<User> firstLevelSet = new HashSet<>();
         for (User neighbor : levelZero) {
             firstLevelSet.addAll(UserPanel.getUserPanel().getUsersGraph().getNeighbors(neighbor));
@@ -267,13 +284,6 @@ public class User {
         for (User neighbor1 : firstLevelSet) {
             bfsMap.put(2, neighbor1);
         }
-        Set<User> secondLevelSet = new HashSet<>();
-        for (User neighbor : firstLevelSet) {
-            secondLevelSet.addAll(UserPanel.getUserPanel().getUsersGraph().getNeighbors(neighbor));
-        }
-        for (User neighbor2 : secondLevelSet) {
-            if (!firstLevelSet.contains(neighbor2))
-                bfsMap.put(1, neighbor2);
-        }
+        return firstLevelSet;
     }
 }
