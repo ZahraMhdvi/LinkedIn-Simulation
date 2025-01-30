@@ -208,12 +208,12 @@ public class Menu {
                 case 1:
                     System.out.print("Enter table name: ");
                     String tableName = scanner.nextLine();
-                    userPanel.createTable(tableName, scanner);
+                    userPanel.getCurrentUser().createTable(tableName, scanner);
                     break;
                 case 2:
                     System.out.print("Enter table name: ");
                     tableName = scanner.nextLine();
-                    userPanel.insertIntoTable(tableName, scanner);
+                    userPanel.getCurrentUser().insertIntoTable(tableName, scanner);
                     break;
                 case 3:
                     System.out.print("Enter table name: ");
@@ -221,7 +221,7 @@ public class Menu {
                     System.out.print("Enter row ID to delete: ");
                     int rowId = scanner.nextInt();
                     scanner.nextLine();
-                    userPanel.deleteRowFromTable(tableName, rowId);
+                    userPanel.getCurrentUser().deleteRowFromTable(tableName, rowId);
                     break;
                 case 4:
                     return;

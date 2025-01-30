@@ -3,10 +3,10 @@ package User;
 import DataStructures.Graph.AdjMapGraph;
 import DataStructures.Table.Table;
 import File.JsonFileHandler;
+import Panel.DataType;
+import Panel.DynamicTable;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class User {
     private int id;
@@ -17,6 +17,7 @@ public class User {
     private String workplace;
     private List<String> specialties;
     private Set<Integer> connections;
+    private Map<String, DynamicTable<Integer, Object>> tables;
 
     public int getId() {
         return id;
@@ -91,6 +92,7 @@ public class User {
         this.workplace = workplace;
         this.specialties = specialties;
         this.connections = new HashSet<>(connections);
+        this.tables=new HashMap<>();
     }
 
     @Override
@@ -127,5 +129,104 @@ public class User {
         table.delete(user.id);
         table.insert(this.id, this);
         table.insert(user.id, user);
+    }
+
+    public void createTable(String tableName, Scanner scanner) {
+        if (tables.containsKey(tableName)) {
+            System.out.println("❌Table already exists!");
+            return;
+        }
+
+        System.out.println("Enter number of columns:");
+        int columnCount = scanner.nextInt();
+        scanner.nextLine();
+
+        Map<String, DataType> columnDataTypes = new LinkedHashMap<>();
+
+        for (int i = 0; i < columnCount; i++) {
+            System.out.println("Enter column name " + (i + 1) + ":");
+            String columnName = scanner.nextLine();
+
+            System.out.println("Enter data type for \"" + columnName + "\" (INTEGER, DOUBLE, FLOAT, STRING, DATE):");
+            String dataTypeStr = scanner.nextLine().toUpperCase();
+
+            DataType dataType;
+            try {
+                dataType = DataType.valueOf(dataTypeStr);
+            } catch (IllegalArgumentException e) {
+                System.out.println("❌ Invalid data type! Using STRING by default.");
+                dataType = DataType.STRING;
+            }
+
+            columnDataTypes.put(columnName, dataType);
+        }
+
+        tables.put(tableName, new DynamicTable<>(tableName, columnDataTypes));
+        System.out.println("✅Table \"" + tableName + "\" created successfully!");
+    }
+
+    public void insertIntoTable(String tableName, Scanner scanner) {
+        DynamicTable<Integer, Object> table = tables.get(tableName);
+
+        if (table == null) {
+            System.out.println("❌ Table not found!");
+            return;
+        }
+
+        int rowId = table.getNextId();
+        Map<String, Object> rowData = new LinkedHashMap<>();
+
+        System.out.println("\nInserting row with ID: " + rowId);
+        for (Map.Entry<String, DataType> entry : table.getColumnDataTypes().entrySet()) {
+            String columnName = entry.getKey();
+            DataType dataType = entry.getValue();
+            System.out.println("Enter value for " + columnName + " (" + dataType + "):");
+
+            Object value = getInputValue(scanner, dataType);
+            rowData.put(columnName, value);
+        }
+
+        table.insert(rowId, rowData);
+        System.out.println("✅ Row inserted successfully!");
+    }
+    private Object getInputValue(Scanner scanner, DataType dataType) {
+        switch (dataType) {
+            case INTEGER:
+                return scanner.nextInt();
+            case DOUBLE:
+                return scanner.nextDouble();
+            case FLOAT:
+                return scanner.nextFloat();
+            case STRING:
+                return scanner.next();
+            case DATE:
+                System.out.println("Enter date (YYYY-MM-DD):");
+                return scanner.next();
+            default:
+                return null;
+        }
+    }
+
+    public void deleteRowFromTable(String tableName, int id) {
+        DynamicTable<Integer, Object> table = tables.get(tableName);
+
+        if (table == null) {
+            System.out.println("❌ Table not found!");
+            return;
+        }
+
+        table.delete(id);
+        System.out.println("✅ Row with ID " + id + " deleted successfully!");
+    }
+
+    public void displayTable(String tableName) {
+        DynamicTable<Integer, Object> table = tables.get(tableName);
+
+        if (table == null) {
+            System.out.println("❌ Table not found!");
+            return;
+        }
+
+        table.displayTable();
     }
 }
