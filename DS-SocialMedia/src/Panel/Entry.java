@@ -11,7 +11,7 @@ public class Entry {
         this.value = value;
     }
 
-    public long getKey() {
+    public int getKey() {
         return key;
     }
 

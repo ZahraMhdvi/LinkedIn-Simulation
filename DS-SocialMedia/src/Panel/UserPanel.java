@@ -185,8 +185,10 @@ public class UserPanel {
         }
         if (wantedUser != null) {
             int counter = 1;
-            for (Map.Entry<Integer, User> entry : wantedUser.finalNormalSuggestion(wantedUser).entrySet()) {
+            for (Entry entry : wantedUser.finalNormalSuggestion(wantedUser)) {
                 System.out.println(counter++ + ". " + entry.getValue());
+                if (counter == 21)
+                    break;
             }
         } else System.out.println("User with this ID does not exist!");
     }

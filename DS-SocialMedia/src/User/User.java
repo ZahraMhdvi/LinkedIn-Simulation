@@ -5,6 +5,7 @@ import DataStructures.Table.Table;
 import File.JsonFileHandler;
 import Panel.DataType;
 import Panel.DynamicTable;
+import Panel.Entry;
 import Panel.UserPanel;
 
 import java.util.*;
@@ -19,7 +20,7 @@ public class User {
     private List<String> specialties;
     private Set<Integer> connections;
     private Map<String, DynamicTable<Integer, Object>> tables;
-    private Map<Integer, User> normalSuggestedUsers;
+    private ArrayList<Entry> normalSuggestedUsers;
     private boolean hasEditedConnections;
 
     public int getId() {
@@ -86,7 +87,7 @@ public class User {
         this.connections = connections;
     }
 
-    public Map<Integer, User> getNormalSuggestedUsers() {
+    public ArrayList<Entry> getNormalSuggestedUsers() {
         return normalSuggestedUsers;
     }
 
@@ -108,7 +109,7 @@ public class User {
         this.specialties = specialties;
         this.connections = new HashSet<>(connections);
         this.tables=new HashMap<>();
-        this.normalSuggestedUsers = new HashMap<>();
+        this.normalSuggestedUsers = new ArrayList<>();
         this.hasEditedConnections = false;
     }
 
@@ -249,37 +250,32 @@ public class User {
         table.displayTable();
     }
 
-    public Map<Integer, User> finalNormalSuggestion(User user) {
+    public ArrayList<Entry> finalNormalSuggestion(User user) {
         if (user.getNormalSuggestedUsers().isEmpty() || user.hasEditedConnections) {
             user.getNormalSuggestedUsers().clear();
-            Map<Integer, User> bfsMap = new HashMap<>();
+            ArrayList<Entry> bfsMap = new ArrayList<>();
             fillBFSMap(bfsMap, user);
             updateScores(user, bfsMap);
-            for (Map.Entry<Integer, User> entry : bfsMap.entrySet()) {
+            for (Entry entry : bfsMap) {
                 if (UserPanel.getUserPanel().getUsersGraph().getEdge(user, entry.getValue()) == null && !entry.getValue().equals(user))
-                    user.getNormalSuggestedUsers().put(entry.getKey(), entry.getValue());
+                    user.getNormalSuggestedUsers().add(entry);
             }
         }
         return user.getNormalSuggestedUsers();
     }
 
-    private void updateScores(User user, Map<Integer, User> bfsMap) {
-//        for (Map.Entry<Integer, User> entry : bfsMap.entrySet()) {
-//            int newScore = calculateScore(entry, user);
-//            int prevScore = entry.getKey();
-//            bfsMap.remove(entry.getKey());
-//            bfsMap.put(newScore + prevScore, entry.getValue());
-//        }
-        List<Map.Entry<Integer, User>> entriesToUpdate = new ArrayList<>(bfsMap.entrySet());
-        for (Map.Entry<Integer, User> entry : entriesToUpdate) {
+    private void updateScores(User user, ArrayList<Entry> bfsMap) {
+        List<Entry> entriesToUpdate = new ArrayList<>(bfsMap);
+        for (Entry entry : entriesToUpdate) {
             int newScore = calculateScore(entry, user);
             int prevScore = entry.getKey();
-            bfsMap.remove(entry.getKey());
-            bfsMap.put(newScore + prevScore, entry.getValue());
+            User temp = entry.getValue();
+            bfsMap.remove(entry);
+            bfsMap.add(new Entry(prevScore + newScore, temp));
         }
     }
 
-    private int calculateScore(Map.Entry<Integer, User> user, User currentUser) {
+    private int calculateScore(Entry user, User currentUser) {
         int score = 0;
         if (user.getValue().getField().equalsIgnoreCase(currentUser.getField()))
             score++;
@@ -291,7 +287,7 @@ public class User {
         return score;
     }
 
-    private static int specialityScore(Map.Entry<Integer, User> user, User currentUser, int score) {
+    private static int specialityScore(Entry user, User currentUser, int score) {
         for (String speciality : currentUser.getSpecialties()) {
             if (user.getValue().getSpecialties().contains(speciality))
                 score++;
@@ -300,13 +296,13 @@ public class User {
     }
 
 
-    private void fillBFSMap(Map<Integer, User> bfsMap, User currentUser) {
+    private void fillBFSMap(ArrayList<Entry> bfsMap, User currentUser) {
         Set<User> levelZero = UserPanel.getUserPanel().getUsersGraph().getNeighbors(currentUser);
         Set<User> firstLevelSet = firstLevelBFS(bfsMap, currentUser, levelZero);
         secondLevelBFS(bfsMap, currentUser, firstLevelSet);
     }
 
-    private static void secondLevelBFS(Map<Integer, User> bfsMap, User currentUser, Set<User> firstLevelSet) {
+    private static void secondLevelBFS(ArrayList<Entry> bfsMap, User currentUser, Set<User> firstLevelSet) {
         Set<User> secondLevelSet = new HashSet<>();
         for (User neighbor : firstLevelSet) {
             secondLevelSet.addAll(UserPanel.getUserPanel().getUsersGraph().getNeighbors(neighbor));
@@ -314,18 +310,18 @@ public class User {
         secondLevelSet.remove(currentUser);
         for (User neighbor2 : secondLevelSet) {
             if (!firstLevelSet.contains(neighbor2))
-                bfsMap.put(1, neighbor2);
+                bfsMap.add(new Entry(1, neighbor2));
         }
     }
 
-    private static Set<User> firstLevelBFS(Map<Integer, User> bfsMap, User currentUser, Set<User> levelZero) {
+    private static Set<User> firstLevelBFS(ArrayList<Entry> bfsMap, User currentUser, Set<User> levelZero) {
         Set<User> firstLevelSet = new HashSet<>();
         for (User neighbor : levelZero) {
             firstLevelSet.addAll(UserPanel.getUserPanel().getUsersGraph().getNeighbors(neighbor));
         }
         firstLevelSet.remove(currentUser);
         for (User neighbor1 : firstLevelSet) {
-            bfsMap.put(2, neighbor1);
+            bfsMap.add(new Entry(2, neighbor1));
         }
         return firstLevelSet;
     }
