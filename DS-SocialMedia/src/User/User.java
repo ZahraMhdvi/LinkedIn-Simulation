@@ -5,6 +5,7 @@ import DataStructures.Table.Table;
 import File.JsonFileHandler;
 import Panel.DataType;
 import Panel.DynamicTable;
+import Panel.UserPanel;
 
 import java.util.*;
 
@@ -250,8 +251,29 @@ public class User {
 
     public Map<Integer, User> finalNormalSuggestion(User user) {
         if (user.getNormalSuggestedUsers().isEmpty() || user.hasEditedConnections) {
-            //todo: suggest
+            Map<Integer, User> bfsMap = new HashMap<>();
+            fillBFSMap(bfsMap, user);
         }
         return user.getNormalSuggestedUsers();
+    }
+
+    private void fillBFSMap(Map<Integer, User> bfsMap, User currentUser) {
+        Set<User> levelZero = UserPanel.getUserPanel().getUsersGraph().getNeighbors(currentUser);
+        Set<User> firstLevelSet = new HashSet<>();
+        for (User neighbor : levelZero) {
+            firstLevelSet.addAll(UserPanel.getUserPanel().getUsersGraph().getNeighbors(neighbor));
+        }
+        firstLevelSet.remove(currentUser);
+        for (User neighbor1 : firstLevelSet) {
+            bfsMap.put(2, neighbor1);
+        }
+        Set<User> secondLevelSet = new HashSet<>();
+        for (User neighbor : firstLevelSet) {
+            secondLevelSet.addAll(UserPanel.getUserPanel().getUsersGraph().getNeighbors(neighbor));
+        }
+        for (User neighbor2 : secondLevelSet) {
+            if (!firstLevelSet.contains(neighbor2))
+                bfsMap.put(1, neighbor2);
+        }
     }
 }

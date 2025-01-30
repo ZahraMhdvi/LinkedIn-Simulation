@@ -161,8 +161,8 @@ public class AdjMapGraph<V, E> implements Graph<V, E> {
         }
     }
 
-    public List<V> getNeighbors(V vertex) {
-        List<V> neighbors = new ArrayList<>();
+    public Set<V> getNeighbors(V vertex) {
+        Set<V> neighbors = new HashSet<>();
         if (getAdjacencyMap().containsKey(vertex)) {
             Map<V, E> neighborsMap = getAdjacencyMap().get(vertex);
             neighbors.addAll(neighborsMap.keySet());
