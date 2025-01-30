@@ -47,7 +47,7 @@ public class JsonFileHandler {
                 Set<Integer> setOfIDs = new HashSet<>();
                 JSONArray connectionId = (JSONArray) user.get("connectionId");
                 for (Object cID : connectionId) {
-                    String connectionID = (String) cID;
+                    String connectionID = String.valueOf(cID);
                     setOfIDs.add(Integer.parseInt(connectionID));
                 }
                 initialMap.put(Integer.parseInt(id), new User(Integer.parseInt(id), name, dateOfBirth, universityLocation, field, workplace, listOfSpecialities, setOfIDs));
