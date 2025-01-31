@@ -2,6 +2,9 @@ package Panel;
 
 import java.util.*;
 
+import DataStructures.Graph.AdjMapGraph;
+import DataStructures.Table.Table;
+import File.JsonFileHandler;
 import User.User;
 
 public class MainMenu {
@@ -95,13 +98,27 @@ public class MainMenu {
                 case 5 -> userPanel.displayTableMenu(scanner);
                 case 6 -> displayUserList();
                 case 7 -> {
-                    System.out.print("Enter user ID: ");
-                    int userId = scanner.nextInt();
-                    userPanel.displayUserDetails(userId);
+                    System.out.println("what do you want to search with ?");
+                    System.out.println("1. ID");
+                    System.out.println("2. Field");
+                    System.out.println("3. University");
+                    System.out.println("4. Name");
+                    System.out.println("5. WorkPlace");
+                    System.out.println("Enter your choice: ");
+                    int c = scanner.nextInt();
+                    scanner.nextLine();
+                    if (c == 1) {
+                        System.out.print("Enter user ID: ");
+                        int userId = scanner.nextInt();
+                        userPanel.displayUserDetailsById(userId);
+                    } else {
+                        userPanel.searchByCustomIndex(c);
+                    }
+
                 }
                 case 8 -> {
                     System.out.println("Profile Info:");
-                    userPanel.displayUserDetails(userPanel.getCurrentUser().getId());
+                    userPanel.displayUserDetailsById(userPanel.getCurrentUser().getId());
                 }
                 case 9 -> {
                     userPanel.logout();
@@ -213,4 +230,6 @@ public class MainMenu {
         }
         return null;
     }
+
+
 }
