@@ -1,7 +1,7 @@
 package Analysis;
 
 public class BPTAnalysis {
-    //D is the order of bpt that is given in the constructor
+    //D -> the order of bpt that is given in the constructor, M -> num of duplicate keys
 
     //------------------------------------------//
     //      search()   |  O(log_{D}(N) + M)     //

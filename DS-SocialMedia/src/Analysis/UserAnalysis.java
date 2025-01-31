@@ -1,7 +1,7 @@
 package Analysis;
 
 public class UserAnalysis {
-    //suggestion: a -> size bfsMap, c -> num of connections
+    //suggestion: a -> size bfsMap, c -> num of connections, n -> num of columns
 
     //--------------------------------------------------//
     //      addNewConnection()   |          O(1)        //
